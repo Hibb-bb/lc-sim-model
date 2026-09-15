@@ -1,0 +1,72 @@
+surveys: SurveyConfig(name='A', wavelength_nm=477.0, sigma=0.015, keep_frac=0.5, bad_prob=0.15, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='B', wavelength_nm=623.0, sigma=0.15, keep_frac=0.1, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='C', wavelength_nm=800.0, sigma=0.05, keep_frac=0.3, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+data: 8000 train / 2000 test stars, 7.0s
+quality score q: A=9.38±0.90 (bad nights 7.23), B=5.83, C=8.03
+class counts (train): [1627, 1581, 1583, 1563, 1646]
+
+=== lejepa_aa ===
+  [lejepa_aa] epoch 1/30 align=0.358 reg=0.129  (11s)
+  [lejepa_aa] epoch 6/30 align=0.316 reg=0.017  (66s)
+  [lejepa_aa] epoch 11/30 align=0.234 reg=0.014  (121s)
+  [lejepa_aa] epoch 16/30 align=0.215 reg=0.011  (175s)
+  [lejepa_aa] epoch 21/30 align=0.202 reg=0.010  (229s)
+  [lejepa_aa] epoch 26/30 align=0.196 reg=0.010  (283s)
+  [lejepa_aa] epoch 30/30 align=0.197 reg=0.010  (326s)
+  A             cls_acc=0.904 cls_bacc=0.904 logP_r2=0.740 amp_band_r2=0.918 fine_r2=0.335 cls_acc_mlp=0.944 cls_bacc_mlp=0.944 logP_r2_mlp=0.824 amp_band_r2_mlp=0.965 fine_r2_mlp=0.603
+  B             cls_acc=0.394 cls_bacc=0.390 logP_r2=0.181 amp_band_r2=0.669 fine_r2=0.108 cls_acc_mlp=0.382 cls_bacc_mlp=0.379 logP_r2_mlp=0.181 amp_band_r2_mlp=0.665 fine_r2_mlp=0.095
+  C             cls_acc=0.412 cls_bacc=0.407 logP_r2=0.226 amp_band_r2=0.715 fine_r2=0.199 cls_acc_mlp=0.424 cls_bacc_mlp=0.420 logP_r2_mlp=0.218 amp_band_r2_mlp=0.734 fine_r2_mlp=0.172
+  A->C          cls_acc=0.232 cls_bacc=0.227 logP_r2=-0.006 amp_band_r2=-2.116 fine_r2=-0.374 cls_acc_mlp=0.240 cls_bacc_mlp=0.231 logP_r2_mlp=-0.142 amp_band_r2_mlp=-4.454 fine_r2_mlp=-0.083
+  A_goodnights  cls_acc=0.928 cls_bacc=0.928 logP_r2=0.782 amp_band_r2=0.929 fine_r2=0.364 cls_acc_mlp=0.969 cls_bacc_mlp=0.969 logP_r2_mlp=0.858 amp_band_r2_mlp=0.973 fine_r2_mlp=0.654
+  A_badnights   cls_acc=0.767 cls_bacc=0.759 logP_r2=0.525 amp_band_r2=0.864 fine_r2=0.164 cls_acc_mlp=0.801 cls_bacc_mlp=0.796 logP_r2_mlp=0.656 amp_band_r2_mlp=0.922 fine_r2_mlp=0.310
+  health        std_min=0.541 std_mean=1.201 mean_abs_corr=0.218
+
+=== lejepa_aab ===
+  [lejepa_aab] epoch 1/30 align=0.522 reg=0.115  (17s)
+  [lejepa_aab] epoch 6/30 align=0.941 reg=0.016  (101s)
+  [lejepa_aab] epoch 11/30 align=0.732 reg=0.013  (185s)
+  [lejepa_aab] epoch 16/30 align=0.702 reg=0.012  (269s)
+  [lejepa_aab] epoch 21/30 align=0.687 reg=0.011  (352s)
+  [lejepa_aab] epoch 26/30 align=0.676 reg=0.010  (436s)
+  [lejepa_aab] epoch 30/30 align=0.678 reg=0.010  (503s)
+  A             cls_acc=0.876 cls_bacc=0.875 logP_r2=0.742 amp_band_r2=0.931 fine_r2=0.560 cls_acc_mlp=0.928 cls_bacc_mlp=0.928 logP_r2_mlp=0.826 amp_band_r2_mlp=0.964 fine_r2_mlp=0.710
+  B             cls_acc=0.494 cls_bacc=0.489 logP_r2=0.360 amp_band_r2=0.731 fine_r2=0.161 cls_acc_mlp=0.507 cls_bacc_mlp=0.503 logP_r2_mlp=0.391 amp_band_r2_mlp=0.734 fine_r2_mlp=0.159
+  C             cls_acc=0.773 cls_bacc=0.770 logP_r2=0.671 amp_band_r2=0.923 fine_r2=0.514 cls_acc_mlp=0.822 cls_bacc_mlp=0.821 logP_r2_mlp=0.777 amp_band_r2_mlp=0.946 fine_r2_mlp=0.564
+  A->C          cls_acc=0.537 cls_bacc=0.542 logP_r2=0.198 amp_band_r2=0.729 fine_r2=-4.697 cls_acc_mlp=0.519 cls_bacc_mlp=0.524 logP_r2_mlp=0.594 amp_band_r2_mlp=0.720 fine_r2_mlp=-4.319
+  A_goodnights  cls_acc=0.896 cls_bacc=0.895 logP_r2=0.770 amp_band_r2=0.939 fine_r2=0.626 cls_acc_mlp=0.949 cls_bacc_mlp=0.949 logP_r2_mlp=0.854 amp_band_r2_mlp=0.972 fine_r2_mlp=0.764
+  A_badnights   cls_acc=0.764 cls_bacc=0.756 logP_r2=0.602 amp_band_r2=0.894 fine_r2=0.179 cls_acc_mlp=0.807 cls_bacc_mlp=0.800 logP_r2_mlp=0.689 amp_band_r2_mlp=0.924 fine_r2_mlp=0.399
+  health        std_min=0.579 std_mean=1.166 mean_abs_corr=0.224
+
+=== contrastive_aa ===
+  [contrastive_aa] epoch 1/30 align=5.987 reg=0.000  (9s)
+  [contrastive_aa] epoch 6/30 align=3.203 reg=0.000  (54s)
+  [contrastive_aa] epoch 11/30 align=3.014 reg=0.000  (99s)
+  [contrastive_aa] epoch 16/30 align=2.923 reg=0.000  (143s)
+  [contrastive_aa] epoch 21/30 align=2.884 reg=0.000  (188s)
+  [contrastive_aa] epoch 26/30 align=2.863 reg=0.000  (233s)
+  [contrastive_aa] epoch 30/30 align=2.871 reg=0.000  (269s)
+  A             cls_acc=0.969 cls_bacc=0.969 logP_r2=0.784 amp_band_r2=0.913 fine_r2=0.461 cls_acc_mlp=0.978 cls_bacc_mlp=0.977 logP_r2_mlp=0.871 amp_band_r2_mlp=0.976 fine_r2_mlp=0.712
+  B             cls_acc=0.421 cls_bacc=0.418 logP_r2=0.202 amp_band_r2=0.696 fine_r2=0.145 cls_acc_mlp=0.390 cls_bacc_mlp=0.386 logP_r2_mlp=0.181 amp_band_r2_mlp=0.688 fine_r2_mlp=0.061
+  C             cls_acc=0.413 cls_bacc=0.407 logP_r2=0.192 amp_band_r2=0.797 fine_r2=0.250 cls_acc_mlp=0.402 cls_bacc_mlp=0.396 logP_r2_mlp=0.193 amp_band_r2_mlp=0.816 fine_r2_mlp=0.254
+  A->C          cls_acc=0.264 cls_bacc=0.255 logP_r2=-18.547 amp_band_r2=-47.774 fine_r2=-0.353 cls_acc_mlp=0.211 cls_bacc_mlp=0.201 logP_r2_mlp=-10.650 amp_band_r2_mlp=-116.140 fine_r2_mlp=-0.897
+  A_goodnights  cls_acc=0.987 cls_bacc=0.987 logP_r2=0.816 amp_band_r2=0.922 fine_r2=0.497 cls_acc_mlp=0.994 cls_bacc_mlp=0.994 logP_r2_mlp=0.899 amp_band_r2_mlp=0.983 fine_r2_mlp=0.771
+  A_badnights   cls_acc=0.865 cls_bacc=0.858 logP_r2=0.621 amp_band_r2=0.866 fine_r2=0.256 cls_acc_mlp=0.885 cls_bacc_mlp=0.881 logP_r2_mlp=0.730 amp_band_r2_mlp=0.939 fine_r2_mlp=0.372
+  health        std_min=0.271 std_mean=0.360 mean_abs_corr=0.181
+
+=== contrastive_aab ===
+  [contrastive_aab] epoch 1/30 align=6.628 reg=0.000  (14s)
+  [contrastive_aab] epoch 6/30 align=5.102 reg=0.000  (86s)
+  [contrastive_aab] epoch 11/30 align=4.935 reg=0.000  (159s)
+  [contrastive_aab] epoch 16/30 align=4.853 reg=0.000  (231s)
+  [contrastive_aab] epoch 21/30 align=4.806 reg=0.000  (304s)
+  [contrastive_aab] epoch 26/30 align=4.776 reg=0.000  (375s)
+  [contrastive_aab] epoch 30/30 align=4.775 reg=0.000  (433s)
+  A             cls_acc=0.936 cls_bacc=0.935 logP_r2=0.797 amp_band_r2=0.931 fine_r2=0.622 cls_acc_mlp=0.965 cls_bacc_mlp=0.965 logP_r2_mlp=0.864 amp_band_r2_mlp=0.972 fine_r2_mlp=0.754
+  B             cls_acc=0.546 cls_bacc=0.542 logP_r2=0.409 amp_band_r2=0.755 fine_r2=0.194 cls_acc_mlp=0.572 cls_bacc_mlp=0.568 logP_r2_mlp=0.447 amp_band_r2_mlp=0.756 fine_r2_mlp=0.187
+  C             cls_acc=0.865 cls_bacc=0.863 logP_r2=0.754 amp_band_r2=0.928 fine_r2=0.513 cls_acc_mlp=0.903 cls_bacc_mlp=0.903 logP_r2_mlp=0.825 amp_band_r2_mlp=0.956 fine_r2_mlp=0.564
+  A->C          cls_acc=0.703 cls_bacc=0.698 logP_r2=0.690 amp_band_r2=0.039 fine_r2=0.411 cls_acc_mlp=0.761 cls_bacc_mlp=0.758 logP_r2_mlp=0.725 amp_band_r2_mlp=0.145 fine_r2_mlp=0.491
+  A_goodnights  cls_acc=0.959 cls_bacc=0.958 logP_r2=0.824 amp_band_r2=0.940 fine_r2=0.659 cls_acc_mlp=0.987 cls_bacc_mlp=0.987 logP_r2_mlp=0.882 amp_band_r2_mlp=0.978 fine_r2_mlp=0.808
+  A_badnights   cls_acc=0.804 cls_bacc=0.798 logP_r2=0.659 amp_band_r2=0.882 fine_r2=0.407 cls_acc_mlp=0.838 cls_bacc_mlp=0.831 logP_r2_mlp=0.771 amp_band_r2_mlp=0.940 fine_r2_mlp=0.441
+  health        std_min=0.297 std_mean=0.527 mean_abs_corr=0.201
+
+done in 1785s -> results/add_bad/results.md

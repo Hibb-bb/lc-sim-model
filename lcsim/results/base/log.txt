@@ -1,0 +1,130 @@
+surveys: SurveyConfig(name='A', wavelength_nm=477.0, sigma=0.015, keep_frac=0.5, bad_prob=0.15, bad_sigma_mult=5.0, bad_keep_mult=0.4)
+         SurveyConfig(name='B', wavelength_nm=623.0, sigma=0.15, keep_frac=0.1, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4)
+         SurveyConfig(name='C', wavelength_nm=800.0, sigma=0.05, keep_frac=0.3, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4)
+data: 8000 train / 2000 test stars, 5.5s
+quality score q: A=9.38±0.90 (bad nights 7.23), B=5.83, C=8.03
+supervised raw A: cls_acc=0.982 logP_r2=0.842 amp_band_r2=0.973 fine_r2=0.822
+supervised raw B: cls_acc=0.493 logP_r2=0.356 amp_band_r2=0.745 fine_r2=0.161
+supervised raw C: cls_acc=0.952 logP_r2=0.809 amp_band_r2=0.960 fine_r2=0.698
+
+=== lejepa ===
+  [lejepa] epoch 1/30 align=0.551 reg=0.114  (11s)
+  [lejepa] epoch 6/30 align=1.183 reg=0.016  (60s)
+  [lejepa] epoch 11/30 align=1.037 reg=0.013  (110s)
+  [lejepa] epoch 16/30 align=0.968 reg=0.012  (160s)
+  [lejepa] epoch 21/30 align=0.933 reg=0.011  (210s)
+  [lejepa] epoch 26/30 align=0.932 reg=0.010  (258s)
+  [lejepa] epoch 30/30 align=0.921 reg=0.010  (298s)
+  A             cls_acc=0.826 logP_r2=0.677 amp_band_r2=0.919 fine_r2=0.475
+  B             cls_acc=0.491 logP_r2=0.338 amp_band_r2=0.737 fine_r2=0.147
+  C             cls_acc=0.713 logP_r2=0.601 amp_band_r2=0.896 fine_r2=0.454
+  A->C          cls_acc=0.531 logP_r2=-3.584 amp_band_r2=-2.857 fine_r2=-2.099
+  A_goodnights  cls_acc=0.855 logP_r2=0.708 amp_band_r2=0.924 fine_r2=0.514
+  A_badnights   cls_acc=0.659 logP_r2=0.519 amp_band_r2=0.890 fine_r2=0.249
+  health        std_min=0.783 std_mean=1.135 mean_abs_corr=0.239
+
+=== contrastive ===
+  [contrastive] epoch 1/30 align=6.241 reg=0.000  (9s)
+  [contrastive] epoch 6/30 align=5.279 reg=0.000  (48s)
+  [contrastive] epoch 11/30 align=5.080 reg=0.000  (89s)
+  [contrastive] epoch 16/30 align=4.999 reg=0.000  (128s)
+  [contrastive] epoch 21/30 align=4.948 reg=0.000  (167s)
+  [contrastive] epoch 26/30 align=4.906 reg=0.000  (206s)
+  [contrastive] epoch 30/30 align=4.917 reg=0.000  (237s)
+  A             cls_acc=0.893 logP_r2=0.778 amp_band_r2=0.934 fine_r2=0.612
+  B             cls_acc=0.529 logP_r2=0.401 amp_band_r2=0.762 fine_r2=0.189
+  C             cls_acc=0.776 logP_r2=0.670 amp_band_r2=0.922 fine_r2=0.532
+  A->C          cls_acc=0.524 logP_r2=-0.204 amp_band_r2=-4.368 fine_r2=0.290
+  A_goodnights  cls_acc=0.913 logP_r2=0.805 amp_band_r2=0.944 fine_r2=0.664
+  A_badnights   cls_acc=0.780 logP_r2=0.645 amp_band_r2=0.878 fine_r2=0.315
+  health        std_min=0.325 std_mean=0.568 mean_abs_corr=0.224
+
+=== aug_only ===
+  [aug_only] epoch 1/30 align=0.353 reg=0.131  (5s)
+  [aug_only] epoch 6/30 align=0.289 reg=0.019  (27s)
+  [aug_only] epoch 11/30 align=0.188 reg=0.014  (49s)
+  [aug_only] epoch 16/30 align=0.150 reg=0.012  (71s)
+  [aug_only] epoch 21/30 align=0.142 reg=0.011  (94s)
+  [aug_only] epoch 26/30 align=0.138 reg=0.011  (118s)
+  [aug_only] epoch 30/30 align=0.137 reg=0.011  (136s)
+  A             cls_acc=0.895 logP_r2=0.705 amp_band_r2=0.914 fine_r2=0.342
+  B             cls_acc=0.338 logP_r2=0.119 amp_band_r2=0.654 fine_r2=0.112
+  C             cls_acc=0.427 logP_r2=0.285 amp_band_r2=0.823 fine_r2=0.377
+  A->C          cls_acc=0.202 logP_r2=-0.363 amp_band_r2=0.270 fine_r2=-0.138
+  A_goodnights  cls_acc=0.930 logP_r2=0.738 amp_band_r2=0.922 fine_r2=0.390
+  A_badnights   cls_acc=0.696 logP_r2=0.540 amp_band_r2=0.873 fine_r2=0.066
+  health        std_min=0.529 std_mean=1.206 mean_abs_corr=0.227
+
+=== single_good ===
+  [single_good] epoch 1/30 align=0.358 reg=0.129  (11s)
+  [single_good] epoch 6/30 align=0.316 reg=0.017  (60s)
+  [single_good] epoch 11/30 align=0.234 reg=0.014  (110s)
+  [single_good] epoch 16/30 align=0.215 reg=0.011  (158s)
+  [single_good] epoch 21/30 align=0.202 reg=0.010  (204s)
+  [single_good] epoch 26/30 align=0.196 reg=0.010  (251s)
+  [single_good] epoch 30/30 align=0.197 reg=0.010  (290s)
+  A             cls_acc=0.904 logP_r2=0.740 amp_band_r2=0.918 fine_r2=0.335
+  B             cls_acc=0.394 logP_r2=0.181 amp_band_r2=0.669 fine_r2=0.108
+  C             cls_acc=0.412 logP_r2=0.226 amp_band_r2=0.715 fine_r2=0.199
+  A->C          cls_acc=0.232 logP_r2=-0.006 amp_band_r2=-2.116 fine_r2=-0.374
+  A_goodnights  cls_acc=0.928 logP_r2=0.782 amp_band_r2=0.929 fine_r2=0.364
+  A_badnights   cls_acc=0.767 logP_r2=0.525 amp_band_r2=0.864 fine_r2=0.164
+  health        std_min=0.541 std_mean=1.201 mean_abs_corr=0.218
+
+=== split_only ===
+  [split_only] epoch 1/30 align=0.111 cross=0.171 reg=0.114  (53s)
+  [split_only] epoch 6/30 align=0.457 cross=0.037 reg=0.024  (322s)
+  [split_only] epoch 11/30 align=0.323 cross=0.023 reg=0.017  (604s)
+  [split_only] epoch 16/30 align=0.285 cross=0.016 reg=0.015  (649s)
+  [split_only] epoch 21/30 align=0.276 cross=0.013 reg=0.013  (694s)
+  [split_only] epoch 26/30 align=0.269 cross=0.011 reg=0.013  (741s)
+  [split_only] epoch 30/30 align=0.270 cross=0.011 reg=0.013  (778s)
+  A             cls_acc=0.827 logP_r2=0.708 amp_band_r2=0.924 fine_r2=0.200
+  B             cls_acc=0.407 logP_r2=0.239 amp_band_r2=0.733 fine_r2=0.041
+  C             cls_acc=0.504 logP_r2=0.305 amp_band_r2=0.870 fine_r2=0.179
+  A->C          cls_acc=0.210 logP_r2=-0.893 amp_band_r2=-0.271 fine_r2=-37.749
+  A_goodnights  cls_acc=0.873 logP_r2=0.743 amp_band_r2=0.932 fine_r2=0.221
+  A_badnights   cls_acc=0.564 logP_r2=0.529 amp_band_r2=0.885 fine_r2=0.077
+  A_zs          cls_acc=0.672 logP_r2=0.494 amp_band_r2=0.713 fine_r2=0.145
+  A_zp          cls_acc=0.750 logP_r2=0.650 amp_band_r2=0.905 fine_r2=0.133
+  B_zs          cls_acc=0.369 logP_r2=0.155 amp_band_r2=0.661 fine_r2=0.016
+  B_zp          cls_acc=0.403 logP_r2=0.238 amp_band_r2=0.727 fine_r2=0.027
+  health        std_min=0.108 std_mean=1.207 mean_abs_corr=0.191
+
+=== gate_only ===
+  [gate_only] epoch 1/30 align=0.135 cross=0.590 reg=0.112  (10s)
+  [gate_only] epoch 6/30 align=0.457 cross=1.326 reg=0.020  (57s)
+  [gate_only] epoch 11/30 align=0.328 cross=1.447 reg=0.016  (106s)
+  [gate_only] epoch 16/30 align=0.306 cross=1.492 reg=0.014  (154s)
+  [gate_only] epoch 21/30 align=0.300 cross=1.475 reg=0.012  (203s)
+  [gate_only] epoch 26/30 align=0.297 cross=1.478 reg=0.012  (250s)
+  [gate_only] epoch 30/30 align=0.299 cross=1.474 reg=0.012  (291s)
+  A             cls_acc=0.829 logP_r2=0.697 amp_band_r2=0.912 fine_r2=0.252
+  B             cls_acc=0.484 logP_r2=0.365 amp_band_r2=0.757 fine_r2=0.093
+  C             cls_acc=0.660 logP_r2=0.525 amp_band_r2=0.899 fine_r2=0.289
+  A->C          cls_acc=0.334 logP_r2=-1.743 amp_band_r2=-7.861 fine_r2=-0.927
+  A_goodnights  cls_acc=0.870 logP_r2=0.733 amp_band_r2=0.921 fine_r2=0.284
+  A_badnights   cls_acc=0.595 logP_r2=0.514 amp_band_r2=0.869 fine_r2=0.061
+  health        std_min=0.845 std_mean=1.620 mean_abs_corr=0.271
+
+=== ours ===
+  [ours] epoch 1/30 align=0.131 cross=0.480 reg=0.114  (9s)
+  [ours] epoch 6/30 align=0.420 cross=0.962 reg=0.021  (57s)
+  [ours] epoch 11/30 align=0.345 cross=1.131 reg=0.015  (106s)
+  [ours] epoch 16/30 align=0.320 cross=1.160 reg=0.013  (152s)
+  [ours] epoch 21/30 align=0.316 cross=1.146 reg=0.012  (200s)
+  [ours] epoch 26/30 align=0.316 cross=1.133 reg=0.012  (248s)
+  [ours] epoch 30/30 align=0.312 cross=1.133 reg=0.012  (287s)
+  A             cls_acc=0.875 logP_r2=0.715 amp_band_r2=0.929 fine_r2=0.235
+  B             cls_acc=0.505 logP_r2=0.358 amp_band_r2=0.753 fine_r2=0.101
+  C             cls_acc=0.695 logP_r2=0.586 amp_band_r2=0.907 fine_r2=0.282
+  A->C          cls_acc=0.212 logP_r2=0.172 amp_band_r2=0.284 fine_r2=-4.054
+  A_goodnights  cls_acc=0.903 logP_r2=0.748 amp_band_r2=0.934 fine_r2=0.274
+  A_badnights   cls_acc=0.713 logP_r2=0.550 amp_band_r2=0.903 fine_r2=0.009
+  A_zs          cls_acc=0.826 logP_r2=0.694 amp_band_r2=0.908 fine_r2=0.139
+  A_zp          cls_acc=0.830 logP_r2=0.673 amp_band_r2=0.901 fine_r2=0.175
+  B_zs          cls_acc=0.480 logP_r2=0.359 amp_band_r2=0.747 fine_r2=0.056
+  B_zp          cls_acc=0.500 logP_r2=0.349 amp_band_r2=0.742 fine_r2=0.078
+  health        std_min=0.649 std_mean=1.616 mean_abs_corr=0.271
+
+done in 2805s -> results/base/results.md

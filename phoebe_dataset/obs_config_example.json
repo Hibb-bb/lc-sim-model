@@ -1,0 +1,8 @@
+{
+  "default": {"n_points": 800, "sigma": 0.010, "season_len": 240.0, "year": 365.25},
+  "Gaia:G":  {"n_points": 120, "sigma": 0.003, "season_len": 365.25, "year": 365.25},
+  "LSST:g":  {"n_points": 250, "sigma": 0.012, "season_len": 240.0, "year": 365.25},
+  "LSST:r":  {"n_points": 350, "sigma": 0.008, "season_len": 240.0, "year": 365.25},
+  "LSST:i":  {"n_points": 350, "sigma": 0.010, "season_len": 240.0, "year": 365.25},
+  "TESS:T":  {"n_points": 3000, "sigma": 0.002, "season_len": 27.0, "year": 730.0}
+}

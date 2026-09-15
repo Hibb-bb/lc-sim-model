@@ -1,0 +1,6 @@
+phoebe>=2.4
+numpy
+astropy
+datasets>=2.14
+huggingface_hub
+pyarrow
