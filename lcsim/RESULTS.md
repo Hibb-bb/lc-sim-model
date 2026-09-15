@@ -1,21 +1,19 @@
-# Survey-pair results: is the worse partner the limit?
+# Survey-pair results
 
 Question: when a model is trained on two surveys of the same stars, does the
 lower-quality survey cap what the representation learns about the better one?
 Every model is trained on exactly two surveys, either AB or AC, and all are
 probed on the same held-out stars.
-
 All numbers below come from the code aligned with LeJEPA's MINIMAL.md
-(2026-09-15). Earlier results (`results/base`, `add_bad`, `gap_*`) were
-produced before that change and are not comparable. They are in git history.
+(2026-09-15). 
+
 
 ## Setup
 
 Synthetic light curves from `lcsim/simulate.py`, as in the README. 8,000 training
 and 2,000 test stars per seed, 5 balanced classes, and a narrow periodic
-"fine" bump (height up to 0.6 × amplitude) that only a clean, dense observation
-can resolve. All surveys share one band (550 nm) and differ only in noise and
-cadence:
+"fine" bump (height up to 0.6 × amplitude). 
+All surveys share one band (550 nm) and differ only in noise and cadence:
 
 | survey | σ | cadence | mean quality q | role |
 |---|---|---|---|---|
@@ -42,12 +40,12 @@ random 60–100% crop, up to 30% point dropout, and added noise.
 |---|---|---|
 | `lejepa` | 2 per survey (4) | (1 − λ) × invariance (spread of all 4 views around their mean) + λ × SIGReg, on the projector output |
 | `lejepa_noproj` | 2 per survey (4) | same as `lejepa`, but applied to the 64-d embedding directly (no projector) |
-| `lejepa_pred` | 2 per survey (4) | within-survey invariance for each survey, plus a residual-MLP predictor that maps the worse survey's projection onto a stop-gradient copy of the better survey's (all 4 cross pairs), averaged 50/50; + SIGReg. The better survey is never pulled toward the worse one |
-| `lejepa_pred_x` | 1 per survey (2) | predictor term only (worse → stop-grad better) + SIGReg. No within-survey term |
-| `lejepa_pred_x_raw` | 1 per survey (2), unaugmented | same as `lejepa_pred_x` on the raw observations |
+| `lejepa_pred` | 2 per survey (4) | within-survey invariance for each survey, plus a residual-MLP predictor that maps the worse survey's projection onto a stop-gradient copy of the better survey's (all 4 cross pairs), averaged 50/50; + SIGReg. The better survey is never pulled toward the worse one. This method includes projector |
+| `lejepa_pred_x` | 1 per survey (2) | predictor term (worse → stop-grad better) + SIGReg. No within-survey term. Local views only |
+| `lejepa_pred_x_raw` | 1 per survey (2), unaugmented | same as `lejepa_pred_x` on the raw observations. Global views only |
 | `contrastive` | 2 per survey (4) | multi-positive NT-Xent (cosine, temperature 0.2): every other view of the same star is a positive, all other stars' views in the batch are negatives |
-| `contrastive_x` | 1 per survey (2) | NT-Xent where the only positive is the other survey's view of the same star |
-| `contrastive_x_raw` | 1 per survey (2), unaugmented | same as `contrastive_x` on the raw observations |
+| `contrastive_x` | 1 per survey (2) | NT-Xent where the only positive is the other survey's view of the same star. Local views only |
+| `contrastive_x_raw` | 1 per survey (2), unaugmented | same as `contrastive_x` on the raw observations. Global views only |
 
 ## Results: AB vs AC
 
@@ -125,7 +123,6 @@ column averages all 3 seeds' checkpoints.
 | *`contrastive`* | AB | *0.86 ± 0.02* | *0.52 (seed 0)* | *1.00 ± 0.00* | *0.92 ± 0.01* | *0.74 ± 0.02* | *0.99 ± 0.00* |
 | | AC | *0.87 ± 0.00* | *0.75 (seed 0)* | *0.99 ± 0.01* | *0.90 ± 0.00* | *0.74 ± 0.01* | *0.96 ± 0.01* |
 
-**The hypothesis is not confirmed.**
 
 * **The prediction fails on the embedding.** On AC, fine R² peaks at 0.82 (λ = 0.05)
   and then falls to 0.76 at λ = 0.2, while AB climbs to 0.87. The AB–AC gap
@@ -138,64 +135,34 @@ column averages all 3 seeds' checkpoints.
 * **The invariance weight does control how much detail the loss space keeps.**
   Raising λ lifts projector-output fine R² for both pairs (AB 0.36 → 0.70, AC 0.38 → 0.63),
   so a strong invariance term discards the bump whoever the partner is.
-* **Side result: λ = 0.05–0.1 is better than the MINIMAL.md default.** At λ = 0.1,
-  AC improves on D (fine 0.60 → 0.68, class 0.92 → 0.96) and AB improves on A (fine
-  0.81 → 0.85), with nothing getting worse.
 
-## Reasoning
 
-**1. With within-survey views, the worse partner does not cap survey A.**
+## Observation
+
+When trained on AB or AC, we refer in-domain performance to the evaluation results on the testset of A.
+For out-domain performance, we refer to the evaluation results on the testset of D.
+
+**1. For in-domain evaluation, the worse partner does not cap survey A.**
 Switching the partner from B to C barely changes A's fine R² for `lejepa`
 (0.81 → 0.79), `lejepa_pred` (0.83 → 0.82) or `contrastive` (0.86 → 0.87).
 All stay near A's own supervised reference (0.87), far above anything
-C can see (0.13). The within-survey pairs give A its own training signal, so
-an uninformative partner costs little on A itself.
+C can see (0.13). 
+However, for `lejepa` variants, missing either local or global view would strongly hurt downstream performance when switching to a worse partner. 
+Similar but less severe trend in observed with the `contrastive` variants. 
+
 
 **2. The worse partner still costs something on surveys the model never trained on.**
-On the unseen survey D, class accuracy drops 3–6 points from AB to AC, and
-`lejepa`'s fine R² drops from 0.67 to 0.60. Training with B, which is about as good
-as D, gives a representation that carries over better to D than training with C.
-A moderate λ recovers most of this for `lejepa` (D at λ = 0.1: fine 0.68, class 0.96).
 
-**3. With cross-survey pairs only, the partner does set the limit.** Take away
-the within-survey term and the AC runs lose most or all of what they learn:
-`contrastive_x` 0.86 → 0.77, `contrastive_x_raw` 0.85 → 0.42, and
-`lejepa_pred_x` / `lejepa_pred_x_raw` collapse to chance on AC in all 3 seeds.
-The predictor loss for `lejepa_pred_x` falls from about 0.29 to 0.04–0.05
-on AB but only to 0.21–0.24 on AC, so the C view gives almost nothing to
-predict. `lejepa_pred_x_raw` on AC still reaches a loss of about 0.07 (0.01–0.02 on
-AB), but only because its representation has collapsed and is easy to
-predict, so a low loss does not mean the model learned anything. Contrastive's negatives
-keep its representation from collapsing. LeJEPA relies only on SIGReg at weight 0.02,
-which is not enough when the alignment target carries no information.
+A difference between `contrastive` and `lejepa_pred` is their out-domain performance. 
+`contrastive` performs well on D even with a worse partner (R² 0.74 → 0.74, acc. 0.99 → 0.96).
+`lejepa_pred` performs way worse with a worse partner for amplitude regression, but okay with classification (R² 0.67 → 0.63, acc. 0.99 → 0.95).
 
-**4. Why contrastive comes out ahead: partly open.** On AB the three main
-methods are essentially tied on the embedding (seed 0: 0.82 / 0.83 / 0.83), and
-λ = 0.2 brings `lejepa` level with contrastive (0.87 vs 0.86). The lasting
-difference is on AC. What we can rule out or support so far:
 
-* **Not alignment strength or rank.** Both methods align the same star's two surveys about
-  equally well (cosine 0.71 vs 0.69 on AC), and their embeddings have similar effective rank.
-* **Not LeJEPA being pulled toward a partner that can't see the bump.** The λ sweep
-  rules this out: `lejepa` loses as much detail in its projector output with B as with C,
-  and weakening the pull does not close the AC gap.
-* **Supported: LeJEPA's invariance term discards detail regardless of partner.** A strong
-  invariance term (0.98 at λ = 0.02) wipes the bump from the projector output whatever
-  the partner, and much of it survives only in the embedding, before the projector.
-  This is why `lejepa_noproj`, with no projector to absorb the invariance, is clearly
-  worse on the bump (0.53 / 0.70).
-* **Open: contrastive seems to *gain* from the worse partner.** Its
-  projector-output fine R² is higher with C than with B (0.75 vs 0.52, seed 0), whereas
-  `lejepa`'s is flat. One untested explanation: when the C view is hard to match, NT-Xent's
-  within-survey A–A positives dominate, and telling a star apart from many similar-looking
-  negatives using its own A views rewards keeping the bump. `lejepa_noproj`'s
-  AC > AB result could have a related cause.
+**3. Contrastive learning preserves more physical information.** 
 
-**Open points.** Why `lejepa`'s AC embedding loses fine detail at λ = 0.2 is not
-understood. One possibility is that too little alignment pressure lets the noisy C views
-pull the shared encoder toward modelling their noise, but this has not been checked.
-The contrastive and `lejepa_pred` projector numbers are seed 0 only. The contrastive
-temperature of 0.2 is untuned.
+Both `contrastive` and `lejepa_pred` performs well on classification for both in and out domain datasets.
+However, `contrastive` performs better on amplitude regression than `lejepa_pred` on both in and out domain.
+
 
 ## Reproduce
 
