@@ -19,6 +19,9 @@ methods (see lcsim/models.py):
     lejepa_pred     LeJEPA with a predictor on the lower-quality side: within-survey view
                     invariance + p(proj_lo) -> stop-grad[proj_hi]; the SECOND survey of each
                     pair is the lower-quality side (AB: B, AC: C)
+    lejepa_pred_x   lejepa_pred on cross-survey pairs only: one augmented view per survey per
+                    star, predictor term + SIGReg, no within-survey invariance
+    lejepa_pred_x_raw  same, but the observations are not augmented at all
 
     python run_pairs.py --out results/pairs
     python run_pairs.py --variants lejepa,contrastive --pairs AB,AC --seeds 0,1,2 --epochs 300 --out results/pairs
@@ -111,7 +114,7 @@ def main():
         for v in variants:
             for pair in pairs:
                 x, y = pair
-                if v == "lejepa_pred":   # the predictor sits on the second survey, which must be the worse one
+                if v.startswith("lejepa_pred"):   # the predictor sits on the second survey, which must be the worse one
                     assert tr["obs"][y]["q"].mean() < tr["obs"][x]["q"].mean(), f"{pair}: {y} is not lower quality than {x}"
                 log(f"=== {v} trained on {pair} (seed {seed}) ===")
                 model = train_ssl(v, tr["obs"][x]["x"], tr["obs"][y]["x"], tr["obs"][x]["q"], tr["obs"][y]["q"],

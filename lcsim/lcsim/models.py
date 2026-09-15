@@ -248,7 +248,7 @@ class Method(nn.Module):
         self.sigreg = SIGReg()
         self.p_s = self.enc.proj.p_s if split else proj_dim      # projected dims the cross term acts on
         self.pred = Predictor(self.p_s) if variant in ("ours", "gate_only") else None
-        if variant == "lejepa_pred":
+        if variant in ("lejepa_pred", "lejepa_pred_x", "lejepa_pred_x_raw"):
             self.pred = ResidualPredictor(proj_dim)
 
     def lejepa(self, proj_v, inv_loss):
@@ -298,6 +298,17 @@ class Method(nn.Module):
             loss_align = self.invariance(proj_v)
             loss, loss_reg = self.lejepa(proj_v, loss_align)
             return loss, dict(align=loss_align.item(), reg=loss_reg.item())
+        if v in ("lejepa_pred_x", "lejepa_pred_x_raw"):
+            # LeJEPA + predictor on cross-survey pairs only: one view per survey per star and no
+            # within-survey invariance. p(proj_b) predicts stop-grad[proj_a] (b is the lower-quality
+            # side); SIGReg on both views. _x augments each single view; _x_raw does not augment.
+            va, vb = (xa, xb) if v == "lejepa_pred_x_raw" else (augment(xa), augment(xb))
+            _, proj = self.enc(torch.cat([va, vb]))
+            proj_v = proj.reshape(2, B, -1)
+            loss_cross = 0.25 * (self.pred(proj_v[1]) - proj_v[0].detach()).square().mean()
+            loss, loss_reg = self.lejepa(proj_v, loss_cross)
+            return loss, dict(cross=loss_cross.item(), reg=loss_reg.item())
+
         if v in ("contrastive_x", "contrastive_x_raw"):
             # cross-survey pairs only: one view per survey per star, and the only positive is the
             # other survey's view of the same star (never two views of the same observation).
