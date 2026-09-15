@@ -1,0 +1,38 @@
+surveys: SurveyConfig(name='A', wavelength_nm=550.0, sigma=0.015, keep_frac=0.5, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='B', wavelength_nm=550.0, sigma=0.05, keep_frac=0.3, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='C', wavelength_nm=550.0, sigma=0.15, keep_frac=0.1, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+device: cuda
+
+##### seed 0: mean quality q A=9.75 B=8.03 C=5.83
+=== lejepa_pred trained on AB (seed 0) ===
+  [lejepa_pred] epoch 1/300 align=0.317 cross=0.281 reg=28.694  (2s)
+  [lejepa_pred] epoch 31/300 align=0.036 cross=0.039 reg=1.384  (22s)
+  [lejepa_pred] epoch 61/300 align=0.029 cross=0.034 reg=1.315  (42s)
+  [lejepa_pred] epoch 91/300 align=0.026 cross=0.030 reg=1.195  (62s)
+  [lejepa_pred] epoch 121/300 align=0.024 cross=0.028 reg=1.106  (82s)
+  [lejepa_pred] epoch 151/300 align=0.022 cross=0.027 reg=1.038  (103s)
+  [lejepa_pred] epoch 181/300 align=0.021 cross=0.026 reg=0.966  (123s)
+  [lejepa_pred] epoch 211/300 align=0.020 cross=0.025 reg=0.921  (143s)
+  [lejepa_pred] epoch 241/300 align=0.019 cross=0.024 reg=0.876  (163s)
+  [lejepa_pred] epoch 271/300 align=0.018 cross=0.023 reg=0.870  (184s)
+  [lejepa_pred] epoch 300/300 align=0.018 cross=0.023 reg=0.864  (204s)
+  probed on A: cls_acc=0.998 cls_bacc=0.997 logP_r2=0.856 amp_band_r2=0.955 fine_r2=0.499 cls_acc_mlp=0.995 cls_bacc_mlp=0.995 logP_r2_mlp=0.907 amp_band_r2_mlp=0.986 fine_r2_mlp=0.842
+  probed on B: cls_acc=0.993 cls_bacc=0.992 logP_r2=0.848 amp_band_r2=0.946 fine_r2=0.475 cls_acc_mlp=0.990 cls_bacc_mlp=0.989 logP_r2_mlp=0.897 amp_band_r2_mlp=0.973 fine_r2_mlp=0.681
+  probed on C: cls_acc=0.562 cls_bacc=0.558 logP_r2=0.397 amp_band_r2=0.784 fine_r2=0.173 cls_acc_mlp=0.603 cls_bacc_mlp=0.600 logP_r2_mlp=0.433 amp_band_r2_mlp=0.781 fine_r2_mlp=0.159
+=== lejepa_pred trained on AC (seed 0) ===
+  [lejepa_pred] epoch 1/300 align=0.304 cross=0.273 reg=33.590  (0s)
+  [lejepa_pred] epoch 31/300 align=0.173 cross=0.189 reg=2.152  (21s)
+  [lejepa_pred] epoch 61/300 align=0.161 cross=0.188 reg=2.022  (41s)
+  [lejepa_pred] epoch 91/300 align=0.154 cross=0.186 reg=1.904  (61s)
+  [lejepa_pred] epoch 121/300 align=0.150 cross=0.185 reg=1.694  (82s)
+  [lejepa_pred] epoch 151/300 align=0.146 cross=0.185 reg=1.698  (102s)
+  [lejepa_pred] epoch 181/300 align=0.133 cross=0.180 reg=1.538  (122s)
+  [lejepa_pred] epoch 211/300 align=0.126 cross=0.181 reg=1.447  (142s)
+  [lejepa_pred] epoch 241/300 align=0.120 cross=0.178 reg=1.391  (163s)
+  [lejepa_pred] epoch 271/300 align=0.118 cross=0.176 reg=1.350  (183s)
+  [lejepa_pred] epoch 300/300 align=0.118 cross=0.177 reg=1.323  (199s)
+  probed on A: cls_acc=0.981 cls_bacc=0.980 logP_r2=0.841 amp_band_r2=0.935 fine_r2=0.564 cls_acc_mlp=0.990 cls_bacc_mlp=0.990 logP_r2_mlp=0.894 amp_band_r2_mlp=0.984 fine_r2_mlp=0.824
+  probed on B: cls_acc=0.928 cls_bacc=0.928 logP_r2=0.795 amp_band_r2=0.925 fine_r2=0.470 cls_acc_mlp=0.959 cls_bacc_mlp=0.959 logP_r2_mlp=0.872 amp_band_r2_mlp=0.966 fine_r2_mlp=0.624
+  probed on C: cls_acc=0.547 cls_bacc=0.543 logP_r2=0.433 amp_band_r2=0.779 fine_r2=0.154 cls_acc_mlp=0.588 cls_bacc_mlp=0.585 logP_r2_mlp=0.512 amp_band_r2_mlp=0.790 fine_r2_mlp=0.134
+
+done in 458s -> results/pairs_pred/seed0/results.md

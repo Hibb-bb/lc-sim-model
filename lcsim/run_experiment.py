@@ -17,19 +17,25 @@ from lcsim.simulate import SimConfig, SurveyConfig, make_dataset, observe
 from lcsim.train import train_ssl, embed, train_supervised, supervised_eval
 from lcsim.probe import probe_targets, fit_eval, METRICS
 
-VARIANTS = ["lejepa", "contrastive", "aug_only", "single_good", "split_only", "gate_only", "ours"]
-
+VARIANTS = ["lejepa", "contrastive", "ours"]
+# ours: LeJEPA + Predictor
 
 def parse():
     p = argparse.ArgumentParser()
     p.add_argument("--n_train", type=int, default=8000)
     p.add_argument("--n_test", type=int, default=2000)
     p.add_argument("--epochs", type=int, default=30)
-    p.add_argument("--batch", type=int, default=128)
+    p.add_argument("--batch", type=int, default=256,
+                   help="SSL batch size; SIGReg's statistic scales with it, so lam=0.02 assumes 256 as in MINIMAL.md")
+    p.add_argument("--lr", type=float, default=2e-3, help="SSL AdamW learning rate (MINIMAL.md)")
+    p.add_argument("--wd", type=float, default=5e-2, help="SSL AdamW weight decay (MINIMAL.md)")
+    p.add_argument("--device", type=str, default=None, help="cuda / cpu (default: cuda if available)")
     p.add_argument("--d", type=int, default=64)
     p.add_argument("--d_s", type=int, default=32)
     p.add_argument("--width", type=int, default=32)
-    p.add_argument("--lam", type=float, default=50.0, help="SIGReg weight")
+    p.add_argument("--lam", type=float, default=0.02,
+                   help="LeJEPA trade-off: loss = lam*SIGReg + (1-lam)*invariance (MINIMAL.md: 0.02)")
+    p.add_argument("--proj_dim", type=int, default=16, help="projector output dim; every SSL loss and SIGReg act here")
     p.add_argument("--tau", type=float, default=0.5, help="quality-gate temperature")
     p.add_argument("--variants", type=str, default=",".join(VARIANTS))
     p.add_argument("--no_supervised", action="store_true")
@@ -67,6 +73,10 @@ def main():
     C = SurveyConfig("C", 800.0, 0.05, 0.3)                    # never seen in training
     A2 = SurveyConfig("A2", args.wl_good, args.sigma_good, args.keep_good, bad_prob=args.bad_prob_good)  # 2nd independent A obs
     log(f"surveys: {A}\n         {B}\n         {C}")
+    import torch
+    from lcsim.train import get_device
+    dev = get_device(args.device)
+    log(f"device: {dev}" + (f" ({torch.cuda.get_device_name(dev)})" if dev.type == "cuda" else ""))
 
     t0 = time.time()
     tr = make_dataset(args.n_train, [A, B, C, A2], cfg, seed=args.seed + 1)
@@ -90,7 +100,8 @@ def main():
             reg_te = np.stack([t_te[k] for k in ("logP", "amp_band", "fine")], 1).astype(np.float32)
             mu, sd = reg_tr.mean(0), reg_tr.std(0)
             net = train_supervised(tr["obs"][s]["x"], t_tr["cls"], (reg_tr - mu) / sd,
-                                   epochs=args.epochs, batch=args.batch, seed=args.seed, log=log, width=args.width)
+                                   epochs=args.epochs, batch=args.batch, seed=args.seed, log=log, width=args.width,
+                                   device=args.device)
             acc, bacc, r2 = supervised_eval(net, te["obs"][s]["x"], t_te["cls"], (reg_te - mu) / sd)
             results["supervised"][s] = dict(cls_acc=float(acc), cls_bacc=float(bacc), logP_r2=float(r2[0]),
                                             amp_band_r2=float(r2[1]), fine_r2=float(r2[2]))
@@ -109,7 +120,9 @@ def main():
         else:
             xb_v, qb_v = xb, qb
         model = train_ssl(v, xa, xb_v, qa, qb_v, xc=xc_v, epochs=args.epochs, batch=args.batch, seed=args.seed, log=log,
-                          d=args.d, d_s=args.d_s, lam=args.lam, tau=args.tau, width=args.width, disjoint=not args.overlap_views)
+                          lr=args.lr, wd=args.wd, device=args.device,
+                          d=args.d, d_s=args.d_s, lam=args.lam, tau=args.tau, width=args.width, disjoint=not args.overlap_views,
+                          proj_dim=args.proj_dim)
         z_tr = {s: embed(model, tr["obs"][s]["x"]) for s in "ABC"}
         z_te = {s: embed(model, te["obs"][s]["x"]) for s in "ABC"}
         res = {}

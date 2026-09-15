@@ -1,0 +1,101 @@
+surveys: SurveyConfig(name='A', wavelength_nm=550.0, sigma=0.015, keep_frac=0.5, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='B', wavelength_nm=550.0, sigma=0.05, keep_frac=0.3, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+         SurveyConfig(name='C', wavelength_nm=550.0, sigma=0.15, keep_frac=0.1, bad_prob=0.0, bad_sigma_mult=5.0, bad_keep_mult=0.4, smooth_days=0.0)
+device: cuda
+
+##### seed 1: mean quality q A=9.75 B=8.03 C=5.83
+supervised raw A: cls_acc=1.000 cls_bacc=0.999 logP_r2=0.889 amp_band_r2=0.978 fine_r2=0.875
+supervised raw B: cls_acc=0.967 cls_bacc=0.967 logP_r2=0.851 amp_band_r2=0.961 fine_r2=0.725
+supervised raw C: cls_acc=0.486 cls_bacc=0.492 logP_r2=0.376 amp_band_r2=0.776 fine_r2=0.120
+=== lejepa trained on AB (seed 1) ===
+  [lejepa] epoch 1/300 align=0.385 reg=27.951  (1s)
+  [lejepa] epoch 31/300 align=0.036 reg=2.009  (19s)
+  [lejepa] epoch 61/300 align=0.028 reg=1.753  (37s)
+  [lejepa] epoch 91/300 align=0.026 reg=1.584  (56s)
+  [lejepa] epoch 121/300 align=0.023 reg=1.455  (74s)
+  [lejepa] epoch 151/300 align=0.022 reg=1.418  (92s)
+  [lejepa] epoch 181/300 align=0.021 reg=1.325  (110s)
+  [lejepa] epoch 211/300 align=0.020 reg=1.256  (129s)
+  [lejepa] epoch 241/300 align=0.019 reg=1.219  (147s)
+  [lejepa] epoch 271/300 align=0.018 reg=1.194  (165s)
+  [lejepa] epoch 300/300 align=0.018 reg=1.188  (183s)
+  probed on A: cls_acc=0.992 cls_bacc=0.992 logP_r2=0.865 amp_band_r2=0.954 fine_r2=0.568 cls_acc_mlp=0.996 cls_bacc_mlp=0.996 logP_r2_mlp=0.917 amp_band_r2_mlp=0.985 fine_r2_mlp=0.832
+  probed on B: cls_acc=0.981 cls_bacc=0.981 logP_r2=0.840 amp_band_r2=0.944 fine_r2=0.497 cls_acc_mlp=0.986 cls_bacc_mlp=0.986 logP_r2_mlp=0.905 amp_band_r2_mlp=0.974 fine_r2_mlp=0.686
+  probed on C: cls_acc=0.583 cls_bacc=0.588 logP_r2=0.392 amp_band_r2=0.776 fine_r2=0.151 cls_acc_mlp=0.579 cls_bacc_mlp=0.584 logP_r2_mlp=0.401 amp_band_r2_mlp=0.774 fine_r2_mlp=0.140
+=== lejepa trained on AC (seed 1) ===
+  [lejepa] epoch 1/300 align=0.365 reg=33.228  (0s)
+  [lejepa] epoch 31/300 align=0.240 reg=4.500  (19s)
+  [lejepa] epoch 61/300 align=0.225 reg=4.381  (37s)
+  [lejepa] epoch 91/300 align=0.216 reg=4.118  (55s)
+  [lejepa] epoch 121/300 align=0.208 reg=3.954  (74s)
+  [lejepa] epoch 151/300 align=0.202 reg=3.779  (92s)
+  [lejepa] epoch 181/300 align=0.195 reg=3.666  (110s)
+  [lejepa] epoch 211/300 align=0.192 reg=3.549  (128s)
+  [lejepa] epoch 241/300 align=0.190 reg=3.463  (147s)
+  [lejepa] epoch 271/300 align=0.186 reg=3.434  (165s)
+  [lejepa] epoch 300/300 align=0.185 reg=3.341  (181s)
+  probed on A: cls_acc=0.935 cls_bacc=0.936 logP_r2=0.804 amp_band_r2=0.944 fine_r2=0.590 cls_acc_mlp=0.975 cls_bacc_mlp=0.975 logP_r2_mlp=0.893 amp_band_r2_mlp=0.978 fine_r2_mlp=0.801
+  probed on B: cls_acc=0.859 cls_bacc=0.861 logP_r2=0.772 amp_band_r2=0.937 fine_r2=0.460 cls_acc_mlp=0.914 cls_bacc_mlp=0.916 logP_r2_mlp=0.864 amp_band_r2_mlp=0.961 fine_r2_mlp=0.590
+  probed on C: cls_acc=0.559 cls_bacc=0.565 logP_r2=0.443 amp_band_r2=0.782 fine_r2=0.145 cls_acc_mlp=0.569 cls_bacc_mlp=0.577 logP_r2_mlp=0.497 amp_band_r2_mlp=0.791 fine_r2_mlp=0.139
+=== lejepa_noproj trained on AB (seed 1) ===
+  [lejepa_noproj] epoch 1/300 align=0.017 reg=103.994  (0s)
+  [lejepa_noproj] epoch 31/300 align=0.050 reg=6.515  (17s)
+  [lejepa_noproj] epoch 61/300 align=0.047 reg=4.899  (35s)
+  [lejepa_noproj] epoch 91/300 align=0.045 reg=4.317  (53s)
+  [lejepa_noproj] epoch 121/300 align=0.043 reg=4.053  (71s)
+  [lejepa_noproj] epoch 151/300 align=0.041 reg=3.781  (90s)
+  [lejepa_noproj] epoch 181/300 align=0.040 reg=3.648  (108s)
+  [lejepa_noproj] epoch 211/300 align=0.039 reg=3.465  (126s)
+  [lejepa_noproj] epoch 241/300 align=0.039 reg=3.366  (144s)
+  [lejepa_noproj] epoch 271/300 align=0.038 reg=3.233  (162s)
+  [lejepa_noproj] epoch 300/300 align=0.038 reg=3.198  (177s)
+  probed on A: cls_acc=0.954 cls_bacc=0.954 logP_r2=0.812 amp_band_r2=0.909 fine_r2=0.246 cls_acc_mlp=0.981 cls_bacc_mlp=0.981 logP_r2_mlp=0.898 amp_band_r2_mlp=0.973 fine_r2_mlp=0.548
+  probed on B: cls_acc=0.937 cls_bacc=0.938 logP_r2=0.796 amp_band_r2=0.905 fine_r2=0.234 cls_acc_mlp=0.956 cls_bacc_mlp=0.957 logP_r2_mlp=0.873 amp_band_r2_mlp=0.955 fine_r2_mlp=0.460
+  probed on C: cls_acc=0.568 cls_bacc=0.571 logP_r2=0.439 amp_band_r2=0.756 fine_r2=0.079 cls_acc_mlp=0.579 cls_bacc_mlp=0.583 logP_r2_mlp=0.453 amp_band_r2_mlp=0.754 fine_r2_mlp=0.045
+=== lejepa_noproj trained on AC (seed 1) ===
+  [lejepa_noproj] epoch 1/300 align=0.020 reg=104.269  (0s)
+  [lejepa_noproj] epoch 31/300 align=0.260 reg=10.226  (17s)
+  [lejepa_noproj] epoch 61/300 align=0.244 reg=8.389  (35s)
+  [lejepa_noproj] epoch 91/300 align=0.235 reg=7.815  (53s)
+  [lejepa_noproj] epoch 121/300 align=0.227 reg=7.540  (71s)
+  [lejepa_noproj] epoch 151/300 align=0.224 reg=7.497  (89s)
+  [lejepa_noproj] epoch 181/300 align=0.220 reg=7.064  (107s)
+  [lejepa_noproj] epoch 211/300 align=0.219 reg=6.801  (125s)
+  [lejepa_noproj] epoch 241/300 align=0.217 reg=6.760  (142s)
+  [lejepa_noproj] epoch 271/300 align=0.217 reg=6.630  (160s)
+  [lejepa_noproj] epoch 300/300 align=0.216 reg=6.507  (175s)
+  probed on A: cls_acc=0.909 cls_bacc=0.910 logP_r2=0.803 amp_band_r2=0.935 fine_r2=0.451 cls_acc_mlp=0.965 cls_bacc_mlp=0.965 logP_r2_mlp=0.879 amp_band_r2_mlp=0.972 fine_r2_mlp=0.674
+  probed on B: cls_acc=0.837 cls_bacc=0.839 logP_r2=0.755 amp_band_r2=0.906 fine_r2=0.315 cls_acc_mlp=0.899 cls_bacc_mlp=0.901 logP_r2_mlp=0.836 amp_band_r2_mlp=0.941 fine_r2_mlp=0.437
+  probed on C: cls_acc=0.575 cls_bacc=0.581 logP_r2=0.496 amp_band_r2=0.794 fine_r2=0.128 cls_acc_mlp=0.573 cls_bacc_mlp=0.577 logP_r2_mlp=0.523 amp_band_r2_mlp=0.793 fine_r2_mlp=0.108
+=== contrastive trained on AB (seed 1) ===
+  [contrastive] epoch 1/300 align=7.069 reg=0.000  (0s)
+  [contrastive] epoch 31/300 align=3.501 reg=0.000  (18s)
+  [contrastive] epoch 61/300 align=3.429 reg=0.000  (36s)
+  [contrastive] epoch 91/300 align=3.395 reg=0.000  (54s)
+  [contrastive] epoch 121/300 align=3.360 reg=0.000  (72s)
+  [contrastive] epoch 151/300 align=3.339 reg=0.000  (90s)
+  [contrastive] epoch 181/300 align=3.312 reg=0.000  (109s)
+  [contrastive] epoch 211/300 align=3.299 reg=0.000  (127s)
+  [contrastive] epoch 241/300 align=3.280 reg=0.000  (145s)
+  [contrastive] epoch 271/300 align=3.271 reg=0.000  (163s)
+  [contrastive] epoch 300/300 align=3.268 reg=0.000  (176s)
+  probed on A: cls_acc=1.000 cls_bacc=0.999 logP_r2=0.871 amp_band_r2=0.967 fine_r2=0.655 cls_acc_mlp=0.997 cls_bacc_mlp=0.997 logP_r2_mlp=0.925 amp_band_r2_mlp=0.988 fine_r2_mlp=0.871
+  probed on B: cls_acc=0.990 cls_bacc=0.990 logP_r2=0.847 amp_band_r2=0.958 fine_r2=0.615 cls_acc_mlp=0.994 cls_bacc_mlp=0.994 logP_r2_mlp=0.906 amp_band_r2_mlp=0.976 fine_r2_mlp=0.757
+  probed on C: cls_acc=0.543 cls_bacc=0.548 logP_r2=0.387 amp_band_r2=0.773 fine_r2=0.178 cls_acc_mlp=0.591 cls_bacc_mlp=0.595 logP_r2_mlp=0.405 amp_band_r2_mlp=0.769 fine_r2_mlp=0.174
+=== contrastive trained on AC (seed 1) ===
+  [contrastive] epoch 1/300 align=7.141 reg=0.000  (0s)
+  [contrastive] epoch 31/300 align=5.383 reg=0.000  (16s)
+  [contrastive] epoch 61/300 align=5.229 reg=0.000  (34s)
+  [contrastive] epoch 91/300 align=5.148 reg=0.000  (53s)
+  [contrastive] epoch 121/300 align=5.067 reg=0.000  (71s)
+  [contrastive] epoch 151/300 align=5.002 reg=0.000  (89s)
+  [contrastive] epoch 181/300 align=4.941 reg=0.000  (107s)
+  [contrastive] epoch 211/300 align=4.905 reg=0.000  (125s)
+  [contrastive] epoch 241/300 align=4.861 reg=0.000  (143s)
+  [contrastive] epoch 271/300 align=4.822 reg=0.000  (161s)
+  [contrastive] epoch 300/300 align=4.835 reg=0.000  (173s)
+  probed on A: cls_acc=0.960 cls_bacc=0.960 logP_r2=0.827 amp_band_r2=0.937 fine_r2=0.765 cls_acc_mlp=0.989 cls_bacc_mlp=0.989 logP_r2_mlp=0.910 amp_band_r2_mlp=0.985 fine_r2_mlp=0.882
+  probed on B: cls_acc=0.911 cls_bacc=0.913 logP_r2=0.792 amp_band_r2=0.938 fine_r2=0.652 cls_acc_mlp=0.970 cls_bacc_mlp=0.970 logP_r2_mlp=0.887 amp_band_r2_mlp=0.970 fine_r2_mlp=0.719
+  probed on C: cls_acc=0.526 cls_bacc=0.533 logP_r2=0.443 amp_band_r2=0.778 fine_r2=0.161 cls_acc_mlp=0.587 cls_bacc_mlp=0.593 logP_r2_mlp=0.475 amp_band_r2_mlp=0.788 fine_r2_mlp=0.157
+
+done in 1216s -> results/pairs/seed1/results.md

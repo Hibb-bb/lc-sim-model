@@ -50,8 +50,16 @@ directions are always computed, each with its own stop-gradient on the target.
 ## Run
 
 ```
-pip install torch scikit-learn matplotlib
-python run_experiment.py --out results/base            # ~45 min on 2 CPU cores
+# into the repo-root .venv (see ../README.md); CUDA 13.0 build of torch for the Quest A100/H100 nodes
+uv pip install --python ../.venv/bin/python "torch==2.14.0+cu130" --extra-index-url https://download.pytorch.org/whl/cu130
+uv pip install --python ../.venv/bin/python scikit-learn matplotlib
+
+python run_experiment.py --out results/base            # uses CUDA if available (--device cpu to force CPU)
+sbatch run_gpu.sbatch --out results/base               # same, as a gengpu batch job
+
+# is the worse partner the limit? three same-band surveys with quality A > B > C,
+# LeJEPA trained on each pair (two sources per run), all probed on the same test stars
+python run_pairs.py --pairs AB,AC,BC --seeds 0,1,2 --out results/pairs
 python plot_results.py results/base
 
 # quality-gap sweep (bad survey noise relative to the good one)
