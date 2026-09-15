@@ -464,6 +464,10 @@ def cmd_assemble(args):
     if args.push:
         from huggingface_hub import HfApi
         token = args.token or os.environ.get("HF_TOKEN")
+        if not args.repo:
+            sys.exit("[assemble] --push needs --repo <user>/<name> (or $HF_REPO)")
+        if not token:
+            sys.exit("[assemble] --push needs a write token: --token, $HF_TOKEN, or `huggingface-cli login`")
         api = HfApi(token=token)
         api.create_repo(args.repo, repo_type="dataset", private=True, exist_ok=True)
         dd.push_to_hub(args.repo, private=True, token=token, max_shard_size="500MB")
@@ -536,7 +540,7 @@ def main():
     g.add_argument("--out", default="data/shards")
     g.add_argument("--shard", type=int, default=0); g.add_argument("--nshards", type=int, default=1)
     g.add_argument("--workers", type=int, default=max(1, os.cpu_count() // 2))
-    g.add_argument("--n_total", type=int, default=20000); g.add_argument("--n_val", type=int, default=2500); g.add_argument("--n_test", type=int, default=2500)
+    g.add_argument("--n_total", type=int, default=5000); g.add_argument("--n_val", type=int, default=625); g.add_argument("--n_test", type=int, default=625)
     g.add_argument("--morph_fracs", default=DEFAULT_MORPH_FRACS, help="contact,detached,semidetached fractions")
     g.add_argument("--n_phases", type=int, default=201); g.add_argument("--ntriangles", type=int, default=800)
     g.add_argument("--irrad_method", default="none", choices=["none", "horvat", "wilson"], help="reflection; 'horvat' is more realistic and ~2x slower")
@@ -548,7 +552,7 @@ def main():
 
     a = sub.add_parser("assemble", help="merge shards, split, push to the Hub")
     a.add_argument("--shards", default="data/shards"); a.add_argument("--filters", default="data/filters.json")
-    a.add_argument("--repo", default=None, help="<user>/<name>"); a.add_argument("--push", action="store_true")
+    a.add_argument("--repo", default=os.environ.get("HF_REPO", "hibb/phoebe-eb-multiband"), help="<user>/<name>; defaults to $HF_REPO"); a.add_argument("--push", action="store_true")
     a.add_argument("--token", default=None, help="HF token (or set HF_TOKEN / run huggingface-cli login)")
     a.add_argument("--save_dir", default=None, help="also save_to_disk here"); a.add_argument("--num_proc", type=int, default=4)
 

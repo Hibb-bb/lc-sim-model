@@ -1,13 +1,21 @@
 # PHOEBE 2 multi-band eclipsing-binary dataset generator
 
-One script, three sub-commands, produces 20 000 PHOEBE 2 eclipsing-binary
-systems observed in several passbands over 2000 days, split 15 000 / 2 500 /
-2 500, as a Hugging Face `DatasetDict`, and pushes it to a private repo.
+One script, three sub-commands, produces 5 000 PHOEBE 2 eclipsing-binary
+systems observed in several passbands over 2000 days, split 3 750 / 625 / 625,
+as a Hugging Face `DatasetDict`, and pushes it to a private repo
+(`hibb/phoebe-eb-multiband`).
+
+The size is set in two places that must agree: `--n_total/--n_val/--n_test` in
+`run_slurm.sh` and the same flags if you call `generate` by hand. To go back to
+the original 20 000, use `--n_total 20000 --n_val 2500 --n_test 2500` and widen
+the array to `0-99`.
 
 Tested end to end with PHOEBE 2.5.4 (contact, detached and semi-detached
 systems, `ck2004` atmospheres and blackbody custom passbands, resume, assemble,
-`save_to_disk`). The `push_to_hub` call itself was not exercised here (no
-network), it is the standard `datasets` API.
+`save_to_disk`). The `push_to_hub` call itself has not been run, it is the
+standard `datasets` API. On QUEST the uv environment below resolves to PHOEBE
+2.5.4 / datasets 5.0.1, and the login nodes can reach
+`tables.phoebe-project.org` for step 1.
 
 ## Files
 
@@ -18,11 +26,28 @@ network), it is the standard `datasets` API.
 | `obs_config_example.json` | per-band cadence / noise / season model |
 | `example_transmission_fakeR.dat` | example 2-column transmission file for a custom passband |
 | `requirements.txt` | `phoebe`, `datasets`, `huggingface_hub`, `pyarrow`, `astropy`, `numpy` |
+| `.env.example` | template for `HF_TOKEN` / `HF_REPO`; copy to `.env` (gitignored) |
 
 ## Quick start
 
+Environment is managed with [uv](https://docs.astral.sh/uv/). On QUEST it is
+available as a module (`module load uv/0.8.18`) or already on `PATH`.
+
 ```bash
-pip install -r requirements.txt
+# 0) one-off: create the environment (from the repo root)
+module load uv/0.8.18          # QUEST; skip if uv is already on PATH
+uv venv --python 3.11 .venv
+uv pip install -r phoebe_dataset/requirements.txt
+source .venv/bin/activate      # the venv lives at the repo root, one level above this dir
+```
+
+`uv pip` needs the venv to exist but not to be active; `run_slurm.sh` activates
+`.venv` itself. To add a package later: `uv pip install <pkg>`. To pin exactly
+what you have: `uv pip freeze > requirements.lock.txt`, and reproduce it
+elsewhere with `uv pip sync requirements.lock.txt`.
+
+```bash
+cd phoebe_dataset
 
 # 1) passbands + percentile wavelengths (login node, needs internet once)
 python phoebe_eb_dataset.py filters --list_online                      # see what PHOEBE offers
@@ -33,11 +58,35 @@ sbatch run_slurm.sh
 #   or, for a smoke test:
 python phoebe_eb_dataset.py generate --filters data/filters.json --out data/shards --limit 20 --workers 4
 
-# 3) merge, split, push (login node, HF_TOKEN with write access)
-export HF_TOKEN=hf_...
+# 3) merge, split, push (login node, needs internet + a write token)
+#    .env already holds your HF_TOKEN and HF_REPO (gitignored; see .env.example)
+source .env
 python phoebe_eb_dataset.py assemble --shards data/shards --filters data/filters.json \
-       --repo <hf-user>/phoebe-eb-multiband --push --save_dir data/hf_local
+       --repo "$HF_REPO" --push --save_dir data/hf_local
 ```
+
+`assemble --push` creates the repo as **private**. `HF_TOKEN` must carry write
+access; `assemble` also accepts `--token` explicitly, and
+`huggingface-cli login` works instead of the env var. Keep the token in `.env`
+and out of git — `.gitignore` already covers it.
+
+### Cluster settings (QUEST)
+
+`run_slurm.sh` is configured for the CIERA buy-in allocation:
+
+| directive | value |
+|---|---|
+| `--account` | `b1094` |
+| `--partition` | `ciera-std` (44 nodes, 52–128 cores; no time limit) |
+| `--array` | `0-24` — 25 shards x 200 systems |
+| `--cpus-per-task` | `8` (one PHOEBE worker per core, threading pinned to 1) |
+| `--mem` | `16G` |
+| `--time` | `02:00:00` |
+
+The `b1094` account carries the `buyin` QOS, which the general partitions
+(`short`, `normal`, `long`) deny — so switching to general access means
+changing account *and* partition together, e.g. `--account=p32234
+--partition=short`. Both variants are in the header of `run_slurm.sh`.
 
 `generate` is resumable: rerunning a shard skips ids already present in its
 parquet checkpoints. Failed systems are retried up to `--max_tries` times with
@@ -116,8 +165,11 @@ split labels.
 
 Measured on 2 CPU cores at 201 + 80 phases, 800 triangles, 2 bands: contact
 ~2–3 s, detached/semi-detached ~7–12 s per system per core. Adding bands is
-cheaper than linear (the mesh is shared). Expect 50–80 CPU-hours for 20k
-systems with 5 bands; `run_slurm.sh` spreads that over a 100-task array.
+cheaper than linear (the mesh is shared). Expect 13–20 CPU-hours for 5k
+systems with 5 bands; `run_slurm.sh` spreads that over a 25-task array of 8
+cores each, so each task does ~200 systems in roughly 5–10 minutes of wall
+time. The full 20k run would be 50–80 CPU-hours — raise `--n_total` and the
+array size together.
 
 ## Known limitations / knobs
 

@@ -1,0 +1,19 @@
+# secrets
+.env
+*.token
+
+# uv / python
+.venv/
+__pycache__/
+*.pyc
+
+# generated data & logs
+phoebe_dataset/data/
+phoebe_dataset/logs/
+phoebe_dataset/shard*_errors.log
+
+.DS_Store
+
+# lcsim run logs and model checkpoints
+lcsim/logs/
+*.pt
